@@ -1,0 +1,15 @@
+# Cache del clima (generado en runtime)
+~/.cache/weather_conky/
+
+# Symlink generado por install.sh
+~/.conkyrc
+
+# Editores
+*.swp
+*.swo
+*~
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
