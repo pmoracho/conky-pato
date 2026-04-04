@@ -1,57 +1,59 @@
 conky.config = {
     --==============================================================================
-    --  Conky Widget - Pato
+    --  Created :2025/Jun/21
+    --
+    --  Pato
     --
     --  author  : pmoracho@gmail.com
     --  version : 1.0
-    --  license : GPLv3
+    --  license : Distributed under the terms of GPLv3
     --==============================================================================
-
     -- Tamaño y Posición --
-    alignment           = 'middle_middle',
-    gap_x               = -730,
-    gap_y               = 300,
-    maximum_width       = 300,
-    minimum_height      = 400,
-    minimum_width       = 300,
+    alignment = 'middle_middle',
+    gap_x = -720,
+    gap_y = 300,
+    maximum_width = 400,
+    minimum_height = 400,
+    minimum_width = 300,
 
     -- Ajustes de Texto --
-    use_xft             = true,
+    use_xft = true,
     override_utf8_locale = true,
-    font                = 'Comfortaa:size=9',
+    font = 'Comfortaa:size=9',
 
     -- Ajustes de Color --
-    default_color       = '#115668',
-    color1              = '#da9902',
-    color2              = '#188fad',
+    default_color = '#115668',
+    color1 = '#da9902',
+    color2 = '#188fad',
 
-    -- Ventana y Transparencia --
-    own_window          = true,
-    own_window_class    = 'Conky',
-    own_window_type     = 'normal',
+    -- Ventana y Transparencia (Limpiado y corregido) --
+    own_window = true,
+    own_window_class = 'Conky',
+    own_window_type = 'normal',
+    -- ARGB visual es la clave para la transparencia real del PNG
     own_window_argb_visual = true,
-    own_window_argb_value  = 0,
+    own_window_argb_value = 0,
     own_window_transparent = true,
-    own_window_hints    = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
 
     -- Gráficos y Rendimiento --
-    background          = false,
-    double_buffer       = true,
-    draw_borders        = false,
-    draw_shades         = false,
-    draw_outline        = false,
-    update_interval     = 1,
+    background = false,
+    double_buffer = true,
+    draw_borders = false,
+    draw_shades = false,
+    draw_outline = false,
+    update_interval = 1,
 
     -- Otros --
-    cpu_avg_samples     = 2,
-    net_avg_samples     = 2,
-    uppercase           = false,
-    use_spacer          = 'none',
+    cpu_avg_samples = 2,
+    net_avg_samples = 2,
+    uppercase = false,
+    use_spacer = 'none',
 }
 
 conky.text = [[
 
-${execi 300 ~/.conky/scripts/weather.sh}\
+${execi 300 ~/.conky/Pato/weather.sh}\
 
 ${alignr}${color}${font Bebas Neue:size=55}${time %Y}
 ${voffset -20}${alignr}${color}${time %^A}
@@ -59,19 +61,22 @@ ${voffset -20}${alignr}${color}${time %d}
 ${voffset -20}${alignr}${time %^B}
 ${voffset -20}${alignr}${time %H:}${color1}${time %M}
 
-${voffset 20}${image ~/.cache/weather_conky/weather_icon.png -p 80,820}
+${alignr}${color}${font Bebas Neue:size=20}
+${voffset -160}${execi 3600 curl -s "https://date.nager.at/api/v3/NextPublicHolidays/AR" | jq -r '.[0] | if .date == "'$(date +%Y-%m-%d)'" then "¡HOY ES FERIADO!: " + .localName else "" + .localName + " (" + .date + ")" end'}
 
-${alignr 20}${voffset -50}${color2}${font Bebas Neue:bold:bold:size=20}SYSTEM INFO${font}
+${voffset 20}${image ~/.cache/weather_conky/weather_icon.png -p 100,820}
+
+${alignr 20}${voffset 120}${color2}${font Bebas Neue:bold:bold:size=20}SYSTEM INFO${font}
 ${alignr 20}${voffset 0}${color1}${font Bebas Neue:size=16}CPU : ${cpu cpu0}% / Temp: ${execi 30 awk '{printf "%.1f°C\n", $1/1000}' /sys/class/hwmon/hwmon5/temp1_input} (${processes} procesos)${font}
 ${alignr 20}${voffset 0}${color1}${font Bebas Neue:size=16}RAM : ${memperc}%${font}
 ${alignr 20}${voffset 0}${color1}${font Bebas Neue:size=16}BATTERY : ${battery_percent BAT0}%${font}
-${alignr 20}${voffset 0}${color2}${font Bebas Neue:size=16}UPTIME: ${color1}${uptime}${font}
+${alignr 20}${voffset 0}${color2}${font Bebas Neue:size=16}UPTIME: ${color1}${uptime %H:}${font}
 
-${alignr 20}${voffset 14}${color2}${font Bebas Neue:bold:size=20}EL TIEMPO EN ${color1}${execi 300 jq -r '.name' ~/.cache/weather_conky/weather.json}${font}
-${alignr 20}${voffset 0}${font Bebas Neue:size=45}${color1}${execi 300 jq '.main.temp' ~/.cache/weather_conky/weather.json | awk '{print int($1+0.5)}'}°C${font}
-${alignr 20}${voffset 0}${color1}${font Bebas Neue:size=16}${execi 300 jq -r '.weather[0].description' ~/.cache/weather_conky/weather.json}${font}
+${alignr 20}${voffset 14}${color2}${font Bebas Neue:bold:size=20}EL TIEMPO EN ${color1}${execi 300 cat ~/.cache/weather_conky/weather.json | jq -r '.name'}${font}
+${alignr 20}${voffset 0}${font Bebas Neue:size=45}${color1}${execi 300 cat ~/.cache/weather_conky/weather.json | jq '.main.temp' | awk '{print int($1+0.5)}'}°C${font}
+${alignr 20}${voffset 0}${color1}${font Bebas Neue:size=16}${execi 300 cat ~/.cache/weather_conky/weather.json | jq -r '.weather[0].description'} ${font}
 
-${alignr 20}${voffset 2}${font Bebas Neue:size=16}${color2}Min : ${color1}${execi 300 jq -r '.main.temp_min' ~/.cache/weather_conky/weather.json | awk '{print int($1+0.5)}'}°C${color2} / Max : ${color1}${execi 300 jq -r '.main.temp_max' ~/.cache/weather_conky/weather.json | awk '{print int($1+0.5)}'}°C${font}
-${alignr 20}${voffset 2}${font Bebas Neue:size=16}${color2}Viento ${color1}${execi 300 jq '.wind.speed' ~/.cache/weather_conky/weather.json}m/s ${color2}/ Humedad ${color1}${execi 300 jq '.main.humidity' ~/.cache/weather_conky/weather.json}%${font}
-${alignr 20}${voffset 2}${font Bebas Neue:size=16}${color2}Visibilidad ${color1}${execi 300 jq '.visibility' ~/.cache/weather_conky/weather.json | awk '{print int($1+0.5)/1000}'}KM ${font}
+${alignr 20}${voffset 2}${font Bebas Neue:size=16}${color2}Min : ${color1}${execi 300 cat ~/.cache/weather_conky/weather.json | jq -r '.main.temp_min' | awk '{print int($1+0.5)}'}°C${color2} / Max : ${color1}${execi 120 cat ~/.cache/weather_conky/weather.json | jq -r '.main.temp_max' | awk '{print int($1+0.5)}'}°C${font}
+${alignr 20}${voffset 2}${font Bebas Neue:size=16}${color2}Viento ${color1}${execi 300 cat ~/.cache/weather_conky/weather.json | jq '.wind.speed'}m/s ${color2}/ Humedad ${color1}${execi 120 cat ~/.cache/weather_conky/weather.json | jq '.main.humidity'}%${font}
+${alignr 20}${voffset 2}${font Bebas Neue:size=16}${color2}Visibilidad ${color1}${execi 300 cat ~/.cache/weather_conky/weather.json | jq '.visibility' | awk '{print int($1+0.5)/1000}'}KM ${font}
 ]]

@@ -12,6 +12,7 @@ Widget de escritorio minimalista para Linux con **reloj**, **info del sistema** 
 - 🕐 **Reloj** con año, día, fecha y hora en tipografía grande (Bebas Neue)
 - 💻 **System Info**: CPU, temperatura, RAM, batería, uptime
 - 🌤️ **Clima** (OpenWeatherMap): temperatura actual, descripción, mín/máx, viento, humedad, visibilidad
+- 📅 **Feriados**: Próximo feriado o notificación si hoy es feriado (Argentina)
 - Ícono del clima descargado automáticamente y cacheado
 - Fondo completamente transparente (ARGB)
 - Todo en español, configurado para **Olivos, Buenos Aires, AR**
