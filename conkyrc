@@ -1,4 +1,5 @@
 conky.config = {
+
     --==============================================================================
     --  Created :2025/Jun/21
     --
@@ -25,16 +26,17 @@ conky.config = {
     default_color = '#115668',
     color1 = '#da9902',
     color2 = '#188fad',
-
-    -- Ventana y Transparencia (Limpiado y corregido) --
+    
+	-- Ventana y Transparencia --
     own_window = true,
-    own_window_class = 'Conky',
-    own_window_type = 'normal',
-    -- ARGB visual es la clave para la transparencia real del PNG
+    own_window_type = 'desktop', -- Volvemos a desktop pero con hints específicos
+    own_window_transparent = true,
     own_window_argb_visual = true,
     own_window_argb_value = 0,
-    own_window_transparent = true,
     own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    
+    -- Si sigue sin verse transparente, añade esta línea:
+    own_window_class = 'Conky',
 
     -- Gráficos y Rendimiento --
     background = false,
@@ -64,7 +66,7 @@ ${voffset -20}${alignr}${time %H:}${color1}${time %M}
 ${alignr}${color}${font Bebas Neue:size=20}
 ${voffset -160}${execi 3600 curl -s "https://date.nager.at/api/v3/NextPublicHolidays/AR" | jq -r '.[0] | if .date == "'$(date +%Y-%m-%d)'" then "¡HOY ES FERIADO!: " + .localName else "" + .localName + " (" + .date + ")" end'}
 
-${voffset 20}${image ~/.cache/weather_conky/weather_icon.png -p 100,820}
+${voffset 20}${image ~/.cache/weather_conky/weather_icon.png -p 90,820}
 
 ${alignr 20}${voffset 120}${color2}${font Bebas Neue:bold:bold:size=20}SYSTEM INFO${font}
 ${alignr 20}${voffset 0}${color1}${font Bebas Neue:size=16}CPU : ${cpu cpu0}% / Temp: ${execi 30 awk '{printf "%.1f°C\n", $1/1000}' /sys/class/hwmon/hwmon5/temp1_input} (${processes} procesos)${font}
